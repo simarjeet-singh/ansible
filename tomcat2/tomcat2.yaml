@@ -45,4 +45,4 @@
 #   - name: Password for new Jenkins Setup
 #     command: cat /usr/share/tomcat/.jenkins/secrets/initialAdminPassword
 
-   - debug: msg "The password for Jenkins is ::  {{lookup('file','/usr/share/tomcat/.jenkins/secrets/initialAdminPassword') }}"
+   - debug: msg="The password for Jenkins is  {{lookup('file','/usr/share/tomcat/.jenkins/secrets/initialAdminPassword') }}"
