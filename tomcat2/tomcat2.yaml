@@ -37,10 +37,11 @@
        group: tomcat
 
    - name: Execute the script to stop tomcat
-#     command: sh /usr/share/tomcat/bin/shutdown.sh
      command: su - tomcat -c "/usr/share/tomcat/bin/shutdown.sh"
+
    - name: Execute the script
      command: su - tomcat -c "/usr/share/tomcat/bin/startup.sh"
-   -name: Password for new Jenkins Setup
-    command: cat /usr/share/tomcat/.jenkins/secrets/initialAdminPassword
+
+   - name: Password for new Jenkins Setup
+     command: cat /usr/share/tomcat/.jenkins/secrets/initialAdminPassword
 
