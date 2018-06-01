@@ -1,0 +1,31 @@
+---
+- hosts: ansibleprod03
+  remote_user: root
+  tasks:
+#   - name: Downloading mongodb-3.6.4
+#     get_url: url=https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.6.4.tgz dest=/opt/mongodb-linux-x86_64-3.6.4.tgz
+
+   - name: Creating directory /root/database/mongodb
+     file:
+       path=/root/database/mongodb/db
+       state=directory
+   - name: Copy mongodb src onto host
+     copy:
+       src=/opt/mongodb/mongodb-linux-x86_64-3.6.4.tgz
+       dest=/root/database/mongodb
+
+   - name: Extracting archive mongodb-linux-x86_64-3.6.4.tgz
+     unarchive:
+       src: /opt/mongodb/mongodb-linux-x86_64-3.6.4.tgz
+       dest: /root/database/mongodb
+#      remote_src: yes
+
+   - name: Copy mongodb startup script  onto host
+     copy:
+       src: /opt/mongodb/runmongodb.sh
+       dest: /root/database/mongodb
+       mode: 755
+
+   - name: restarting mongodb with data dir /root/database/mongodb/db
+     command: sh /root/database/mongodb/runmongodb.sh
+

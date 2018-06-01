@@ -1,0 +1,47 @@
+---
+- hosts: ansibleprod02
+  remote_user: root
+  tasks:
+   - name: Downloading mysql-5.7.22
+     get_url: url=https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.22-1.el6.x86_64.rpm-bundle.tar dest=/opt/mysql-5.7.22-1.el6.x86_64.rpm-bundle.tar
+
+   - name: Extracting archive mysql-5.7.22-1.el6.x86_64.rpm-bundle.tar
+     unarchive:
+       src: /opt/mysql-5.7.22-1.el6.x86_64.rpm-bundle.tar
+       dest: /opt
+       remote_src: yes
+
+   - name: Removing dependencies mysql-libs
+     yum:
+      name: mysql-libs
+      state: absent
+
+   - name: Uninstalling mysql packages if exists
+     command: rpm -e --nodeps {{item}}
+     with_items:
+       - mysql-community-common-5.7.22-1.el6.x86_64
+       - mysql-community-libs-5.7.22-1.el6.x86_64
+       - mysql-community-devel-5.7.22-1.el6.x86_64
+       - mysql-community-client-5.7.22-1.el6.x86_64
+       - mysql-community-server-5.7.22-1.el6.x86_64
+     ignore_errors: yes
+
+   - name: Installing mysql packages
+     command: rpm -ivh /opt/{{item}}
+     with_items:
+       - mysql-community-common-5.7.22-1.el6.x86_64.rpm
+       - mysql-community-libs-5.7.22-1.el6.x86_64.rpm
+       - mysql-community-devel-5.7.22-1.el6.x86_64.rpm
+       - mysql-community-client-5.7.22-1.el6.x86_64.rpm
+       - mysql-community-server-5.7.22-1.el6.x86_64.rpm
+
+   - name: Copy my.cnf
+     template: src=/opt/mysql/my.cnf dest=/etc/my.cnf
+     #notify: restart mysqld
+
+   - name: Start mysql
+     service: name=mysqld state=started enabled=yes
+  handlers:
+    - name: start mysqld
+      service: name=mysqld state=started
+ 
