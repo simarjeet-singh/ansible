@@ -42,6 +42,7 @@
    - name: Execute the script
      command: su - tomcat -c "/usr/share/tomcat/bin/startup.sh"
 
-   - name: Password for new Jenkins Setup
-     command: cat /usr/share/tomcat/.jenkins/secrets/initialAdminPassword
+#   - name: Password for new Jenkins Setup
+#     command: cat /usr/share/tomcat/.jenkins/secrets/initialAdminPassword
 
+   - debug: msg "The password for Jenkins is ::  {{lookup('file','/usr/share/tomcat/.jenkins/secrets/initialAdminPassword') }}"
