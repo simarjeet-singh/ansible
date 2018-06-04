@@ -5,6 +5,20 @@
    - name: Installng Java 1.7.0
      yum: name=java-1.7.0-openjdk state=present
 
+   - name: apache Installation
+     yum: pkg=httpd state=latest
+
+   - name: Copying configuration file to conf directory of apache
+     template: src=/opt/httpd/httpdconffile.txt dest=/etc/httpd/conf/httpd.conf
+
+   - name: (Enable it on System Boot)
+     service: name=httpd enabled=yes
+     notify:
+       - start apache
+#  handlers:
+#    - name: start apache
+#      service: name=httpd state=started
+
    - name: adding group "tomcat"
      group: name=tomcat
 
