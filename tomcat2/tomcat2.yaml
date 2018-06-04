@@ -9,7 +9,10 @@
      yum: pkg=httpd state=latest
 
    - name: Copying configuration file to conf directory of apache
-     template: src=/opt/httpd/httpdconffile.txt dest=/etc/httpd/conf/httpd.conf
+#     template: src=/opt/httpd/httpdconffile.txt dest=/etc/httpd/conf/httpd.conf
+     copy:
+       src: /opt/httpd/httpdconffile.txt
+       dest: /etc/httpd/conf/httpd.conf
 
    - name: (Enable it on System Boot)
      service: name=httpd enabled=yes
